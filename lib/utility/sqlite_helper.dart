@@ -23,8 +23,7 @@ class SQLiteHelper {
         onCreate: (Database database, int version) {
       return database.execute(
           'CREATE TABLE $nameTable ($columnID INTEGER PRIMARY KEY, $columnToDo TEXT)');
-      }, version: versionDatabase
-    );
+    }, version: versionDatabase);
   }
 
   Future<void> insertValueToSQLite(ToDoModel model) async {
@@ -58,9 +57,9 @@ class SQLiteHelper {
     return todoModels;
   }
 
-  Future<Void> deleteSQLiteWhereId(int id)async{
-
-    Database database = await openDatabase(join(await getDatabasesPath(), nameDatabase));
+  Future<Void> deleteSQLiteWhereId(int id) async {
+    Database database =
+        await openDatabase(join(await getDatabasesPath(), nameDatabase));
 
     try {
       await database.delete(nameTable, where: '$columnID = $id');
@@ -69,5 +68,15 @@ class SQLiteHelper {
     }
   }
 
-
+  Future<void> updateSQLiteWhereId(ToDoModel model) async {
+    print('id ===>>> ${model.id}, ToDo new ===>>> ${model.todo}');
+    Database database =
+        await openDatabase(join(await getDatabasesPath(), nameDatabase));
+    try {
+      await database.update(nameTable, model.toMap(),
+          where: '$columnID = ${model.id}');
+    } catch (e) {
+      print('e edit ===>>> ${e.toString()}');
+    }
+  }
 }
